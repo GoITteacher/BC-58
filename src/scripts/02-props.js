@@ -1,11 +1,5 @@
 let myBtn = document.querySelector('#testButton');
-let imgElem = document.querySelectorAll('img');
-
 myBtn.addEventListener('click', onBtnClick);
-function onBtnClick() {
-  const firstElem = imgElem[0];
-  console.log(firstElem.attributes);
-}
 
 /* 
 elem.hasAttribute(name) - перевіряє наявність атрибута, повертає true або false.
@@ -14,3 +8,19 @@ elem.setAttribute(name, value) - встановлює атрибут.
 elem.removeAttribute(name) - видаляє атрибут.
 elem.attributes - властивість, що повертає об'єкт усіх атрибутів елемента.
 */
+
+function onBtnClick() {
+  const myImg = document.querySelectorAll('img')[1];
+  console.log(myImg.dataset.userName);
+  // console.log(myImg.hasAttribute('hello'));
+  // const imgUrl = myImg.getAttribute('alt');
+  // myImg.setAttribute(
+  //   'src',
+  //   'https://source.unsplash.com/100x100/?random=99&eat,bread,dish,meet,egg',
+  // );
+
+  // myImg.removeAttribute('alt');
+  // myImg.setAttribute('test', 'Hello World');
+  // console.log(myImg.attributes[0]);
+  // console.log(imgUrl);
+}

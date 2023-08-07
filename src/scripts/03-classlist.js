@@ -1,6 +1,6 @@
 let myBtn = document.querySelector('#testButton');
-let listItem = document.querySelector('.js-list');
-
+// let listItem = document.querySelector('.js-list');
+myBtn.addEventListener('click', onClick);
 /* 
 У властивості classList зберігається об'єкт з методами для роботи з класами елемента.
 
@@ -14,3 +14,18 @@ elem.classList.replace(oldClass, newClass) - замінює існуючий к�
 /* 
 Властивість style
 */
+
+const ulElem = document.querySelector('.js-list');
+const liElem = ulElem.querySelector('li');
+// console.log(liElem.classList.contains('bold'));
+// liElem.classList.add('upper', 'italic');
+// liElem.classList.remove('blue', 'bold');
+// liElem.classList.toggle('upper');
+//   liElem.classList.replace('blue', 'tomato');
+liElem.style.backgroundColor = 'grey';
+liElem.style.position = 'fixed';
+function onClick() {
+  //   liElem.style.display = 'flex';
+  const random = Math.round(Math.random() * 1000);
+  liElem.style.left = 20;
+}
