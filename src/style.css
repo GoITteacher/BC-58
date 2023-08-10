@@ -126,3 +126,23 @@ img{
     background-color: #06b;
   }
   
+
+
+
+  .blur{
+    -webkit-filter: blur(5px);
+		filter: blur(5px);
+		transition: filter 400ms, -webkit-filter 400ms;
+    border:1px solid tomato;
+    scale: 0.7;
+  }
+
+  .blur.lazyloading{
+    border:20px solid black;
+  }
+
+  .blur.lazyloaded{
+    filter: none;
+    border:none;
+    scale: 1;
+  }
