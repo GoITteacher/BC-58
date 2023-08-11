@@ -95,7 +95,7 @@
 
 // =============================
 
-const arr = [5, 0, 0, 0, 9990, 1, 4];
+const arr = [];
 
 function countBlock(arr) {
   let counter = 0;
