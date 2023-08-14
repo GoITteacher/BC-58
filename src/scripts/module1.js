@@ -1,5 +1,18 @@
-export const name1 = 10;
-export const name2 = 10;
-export const name3 = 10;
-export const name4 = 10;
-export const name5 = 10;
+export const x = 10;
+export const y = 30;
+
+export function foo() {
+  console.log(123);
+}
+export const obj = {
+  name: '1231',
+};
+
+// ===============================
+
+export default {
+  x,
+  y,
+  foo,
+  obj,
+};

@@ -1,3 +1,4 @@
-import * as names from './scripts/module1';
-
-console.log(names);
+import { throttle } from 'lodash';
+import MyBox from 'simplelightbox';
+const instance = new MyBox('.gallery ');
+throttle();
