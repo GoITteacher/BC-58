@@ -14,22 +14,29 @@ const refs = {
   notification: document.querySelector('.js-alert'),
 };
 
-setTimeout(showNotification, 5000);
-
-timeoutId = setTimeout(hideNotification, 10000);
 /*
  * Функции
  */
 
-function showNotification() {
-  refs.notification.classList.add('is-visible');
-}
+// function showNotification() {
+//   console.log('show');
+//   refs.notification.classList.add('is-visible');
+// }
 
-function hideNotification() {
-  refs.notification.classList.toggle('is-visible');
-}
+// function hideNotification() {
+//   console.log('hide');
+//   refs.notification.classList.remove('is-visible');
+// }
 
-refs.notification.addEventListener('click', () => {
-  clearTimeout(timeoutId);
-  hideNotification();
-});
+// setTimeout(() => {
+//   showNotification();
+// }, 5000);
+
+// const id = setTimeout(() => {
+//   hideNotification();
+// }, 8000);
+
+// refs.notification.addEventListener('click', () => {
+//   clearTimeout(id);
+//   hideNotification();
+// });
