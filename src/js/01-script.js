@@ -1,61 +1,74 @@
-import { NewsApi } from './modules/newsApi';
-const form = document.querySelector('.js-search-form');
-const btnLoad = document.querySelector('.js-btn-load');
-const articleListElem = document.querySelector('.js-article-list');
+import { NewsAPI } from './modules/newsApi';
 
-let newsApi1 = new NewsApi();
+const newsApi = new NewsAPI();
+let maxPage = 1;
 
-form.addEventListener('submit', e => {
+const refs = {
+  formElem: document.querySelector('.js-search-form'),
+  articleListElem: document.querySelector('.js-article-list'),
+  btnLoadMore: document.querySelector('.js-btn-load'),
+};
+
+refs.formElem.addEventListener('submit', onFormSubmit);
+refs.btnLoadMore.addEventListener('click', onLoadMoreClick);
+
+function onFormSubmit(e) {
   e.preventDefault();
-  const query = e.target.elements.query.value.trim();
-
-  if (query) {
-    newsApi1.currentPage = 1;
-
-    newsApi1.getNewsByAxios(query).then(data => {
-      clearElement(articleListElem);
-      renderArticles(data.articles);
-      btnLoad.disabled = false;
-
-      if (newsApi1.currentPage >= data.total_pages) {
-        btnLoad.disabled = true;
-      }
-      e.target.reset();
-    });
-  } else {
-    console.log('Empty query');
-  }
-});
-
-btnLoad.addEventListener('click', e => {
-  newsApi1.currentPage++;
-  newsApi1.getNews().then(data => {
+  const query = e.target.elements.query.value;
+  newsApi.query = query;
+  newsApi.page = 1;
+  newsApi.getArticles().then(data => {
+    maxPage = Math.ceil(data.totalResults / newsApi.pageSize);
+    // refs.articleListElem.innerHTML = '';
     renderArticles(data.articles);
-
-    if (newsApi1.currentPage >= data.total_pages) {
-      btnLoad.disabled = true;
-    }
+    refs.btnLoadMore.disabled = false;
+    updateStatusBtn();
   });
-});
+}
 
-function clearElement(element) {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
+function onLoadMoreClick(e) {
+  newsApi.page += 1;
+  newsApi.getArticles().then(data => {
+    renderArticles(data.articles);
+    updateStatusBtn();
+  });
+}
+
+function updateStatusBtn() {
+  if (newsApi.page === maxPage) {
+    refs.btnLoadMore.disabled = true;
   }
 }
 
-function renderArticles(articles) {
-  const markup = articles
-    .map((article, index, array) => {
-      return `
-    <li>
-    <h3>${article.title}</h3>
-    <p>${article.summary}</p>
-    <p>${article.author}</p>
-    </li>
-    `;
-    })
-    .join('');
+function templateArticle({
+  author,
+  title,
+  description,
+  urlToImage,
+  publishedAt,
+}) {
+  return `
+  <li class="card news-card">
+        <img loading="lazy"
+          class="news-image"
+          src="${urlToImage}"
+          alt="${title}"
+        />
+        <h3 class="card-title">
+          ${title}
+        </h3>
+        <p class="card-desc">
+        ${description}
+        </p>
+        <div class="card-footer">
+          <span>${author}</span>
+          <span>${publishedAt}</span>
+        </div>
+      </li>`;
+}
 
-  articleListElem.insertAdjacentHTML('beforeend', markup);
+function renderArticles(articles) {
+  const markup = articles.map(templateArticle).join('');
+  refs.articleListElem.innerHTML = markup;
+  // refs.articleListElem.insertAdjacentHTML('beforeend', markup);
 }
