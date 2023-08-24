@@ -5,7 +5,8 @@
   "scripts": {
     "start": "parcel src/*.html",
     "build": "parcel build src/*.html --public-url /js-example/",
-    "push": "git add . && git commit -m 'update'"
+    "push": "git add . && git commit -m 'update' && git push",
+    "server": "json-server --watch db.json"
   },
   "repository": {
     "type": "git",
@@ -31,5 +32,6 @@
     "parcel-reporter-clean-dist": "^1.0.4",
     "parcel-transformer-hbs": "^1.0.4",
     "posthtml-include": "^1.7.4"
-  }
+  },
+  "type": "module"
 }
