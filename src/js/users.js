@@ -15,7 +15,7 @@ refs.updateUserForm.addEventListener('submit', onUserUpdate);
 refs.resetUserForm.addEventListener('submit', onUserReset);
 // refs.deleteUserForm.addEventListener('submit', onUserDelete);
 
-function onUserCreate(e) {
+async function onUserCreate(e) {
   e.preventDefault();
   const form = e.target;
   const { elements } = form;
@@ -27,15 +27,23 @@ function onUserCreate(e) {
     avatar: 'test',
   };
 
-  UsersAPI.createUser(user).then(createdUser => {
+  try {
+    const createdUser = await UsersAPI.createUser(user);
     const markup = userTemplate(createdUser);
     refs.userListElem.insertAdjacentHTML('beforeend', markup);
-  });
+  } catch (err) {
+    console.log('Error');
+  }
+
+  // UsersAPI.createUser(user).then(createdUser => {
+  //   const markup = userTemplate(createdUser);
+  //   refs.userListElem.insertAdjacentHTML('beforeend', markup);
+  // });
 
   form.reset();
 }
 
-function onUserUpdate(e) {
+async function onUserUpdate(e) {
   e.preventDefault();
 
   const user = {};
@@ -47,14 +55,24 @@ function onUserUpdate(e) {
     }
   });
 
-  UsersAPI.updateUser(user).then(updatedUser => {
+  try {
+    const updatedUser = await UsersAPI.updateUser(user);
     const markup = userTemplate(updatedUser);
     const oldUser = refs.userListElem.querySelector(`li[data-id="${user.id}"]`);
     oldUser.insertAdjacentHTML('afterend', markup);
     oldUser.remove();
-  });
+  } catch (err) {
+    console.log('Error');
+  }
+
+  // UsersAPI.updateUser(user).then(updatedUser => {
+  //   const markup = userTemplate(updatedUser);
+  //   const oldUser = refs.userListElem.querySelector(`li[data-id="${user.id}"]`);
+  //   oldUser.insertAdjacentHTML('afterend', markup);
+  //   oldUser.remove();
+  // });
 }
-function onUserReset(e) {
+async function onUserReset(e) {
   e.preventDefault();
 
   const user = {};
@@ -64,12 +82,22 @@ function onUserReset(e) {
     user[key] = value;
   });
 
-  UsersAPI.resetUser(user).then(updatedUser => {
+  try {
+    const updatedUser = await UsersAPI.resetUser(user);
     const markup = userTemplate(updatedUser);
     const oldUser = refs.userListElem.querySelector(`li[data-id="${user.id}"]`);
     oldUser.insertAdjacentHTML('afterend', markup);
     oldUser.remove();
-  });
+  } catch {
+    console.log('err');
+  }
+
+  // UsersAPI.resetUser(user).then(updatedUser => {
+  //   const markup = userTemplate(updatedUser);
+  //   const oldUser = refs.userListElem.querySelector(`li[data-id="${user.id}"]`);
+  //   oldUser.insertAdjacentHTML('afterend', markup);
+  //   oldUser.remove();
+  // });
 }
 function onUserDelete(e) {}
 

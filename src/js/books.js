@@ -16,7 +16,7 @@ refs.updateFormElem.addEventListener('submit', onBookUpdate);
 refs.resetFormElem.addEventListener('submit', onBookReset);
 refs.deleteFormElem.addEventListener('submit', onBookDelete);
 
-function onBookCreate(e) {
+async function onBookCreate(e) {
   e.preventDefault();
   const book = {};
   const formData = new FormData(e.target);
@@ -25,19 +25,26 @@ function onBookCreate(e) {
     book[key] = value;
   });
 
-  booksAPI
-    .createBook(book)
-    .then(createdBook => {
+  try {
+    const createdBook = await booksAPI.createBook(book);
+    const markup = bookTemplate(createdBook);
+    refs.bookListElem.insertAdjacentHTML('beforeend', markup);
+  } catch (err) {
+    console.log(err);
+  }
+
+  /* booksAPI.createBook(book).then(createdBook => {
       const markup = bookTemplate(createdBook);
       refs.bookListElem.insertAdjacentHTML('beforeend', markup);
     })
     .catch(err => {
       console.log(err);
-    });
+    }); 
+  */
 
   e.target.reset();
 }
-function onBookUpdate(e) {
+async function onBookUpdate(e) {
   e.preventDefault();
   const book = {};
   const formData = new FormData(e.target);
@@ -48,17 +55,24 @@ function onBookUpdate(e) {
     book[key] = value;
   });
 
-  booksAPI
-    .updateBook(book)
-    .then(newBook => {
+  try {
+    const newBook = await booksAPI.updateBook(book);
+    rerenderBook(newBook);
+  } catch (err) {
+    console.log(err);
+  }
+
+  /* booksAPI.updateBook(book).then(newBook => {
       rerenderBook(newBook);
     })
     .catch(err => {
       console.log(err);
-    });
+    }); 
+    */
   e.target.reset();
 }
-function onBookReset(e) {
+
+async function onBookReset(e) {
   e.preventDefault();
   const book = {};
   const formData = new FormData(e.target);
@@ -67,23 +81,41 @@ function onBookReset(e) {
     book[key] = value;
   });
 
-  booksAPI
+  try {
+    const newBook = await booksAPI.resetBook(book);
+    rerenderBook(newBook);
+  } catch (err) {
+    console.log(err);
+  }
+
+  /* booksAPI
     .resetBook(book)
     .then(newBook => {
       rerenderBook(newBook);
     })
     .catch(err => {
       console.log(err);
-    });
+    }); 
+    */
   e.target.reset();
 }
-function onBookDelete(e) {
+async function onBookDelete(e) {
   e.preventDefault();
   const id = e.target.elements.bookId.value;
-  booksAPI.deleteBook(id).then(() => {
+
+  try {
+    await booksAPI.deleteBook(id);
     const oldBook = refs.bookListElem.querySelector(`li[data-id="${id}"]`);
     oldBook.remove();
-  });
+  } catch {
+    console.log('Err');
+  }
+
+  /* booksAPI.deleteBook(id).then(() => {
+    const oldBook = refs.bookListElem.querySelector(`li[data-id="${id}"]`);
+    oldBook.remove();
+  }); */
+
   e.target.reset();
 }
 
@@ -110,10 +142,13 @@ function renderBooks(books) {
 }
 
 // ===================================================
-function onLoadPage() {
-  booksAPI.getBooks().then(books => {
-    renderBooks(books);
-  });
+async function onLoadPage() {
+  const books = await booksAPI.getBooks();
+  renderBooks(books);
+
+  // booksAPI.getBooks().then(books => {
+  //   renderBooks(books);
+  // });
 }
 onLoadPage();
 // ===================================================

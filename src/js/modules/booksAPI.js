@@ -1,23 +1,61 @@
+import axios from 'axios';
+const axios2 = axios.create({
+  baseURL: 'http://localhost:3000',
+  headers: {
+    volodkaKey: 'HELLO WORLD',
+    myHeaders: 'Hello Headers',
+  },
+  params: {
+    key: 'HELLO',
+    login: 'TEST',
+  },
+});
+
 export class BooksAPI {
+  async getBooks() {
+    return axios2.get('/books').then(res => res.data);
+  }
+
+  async createBook(book) {
+    const res = await axios2.post('/books', book);
+    return res.data;
+  }
+
+  async updateBook({ id, ...book }) {
+    const res = await axios2.patch(`/books/${id}`, book);
+    return res.data;
+  }
+
+  async resetBook({ id, ...book }) {
+    const res = await axios.put(`/books/${id}`, book);
+    return res.data;
+  }
+
+  deleteBook(id) {
+    return axios.delete(`/books/${id}`);
+  }
+}
+
+export class BooksAPIV2 {
   #BASE_URL = 'http://localhost:3000';
   #END_POINT = '/books';
 
-  getBooks() {
+  async getBooks() {
     const url = `${this.#BASE_URL}${this.#END_POINT}`;
-    return fetch(url)
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          throw new Error('Error get Books');
-        }
-      })
-      .catch(err => {
-        console.log(err.message);
-        return [];
-      });
+
+    try {
+      const res = await fetch(url);
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error('Error get Books');
+      }
+    } catch (err) {
+      console.log(err.message);
+      return [];
+    }
   }
-  createBook(book) {
+  async createBook(book) {
     const url = `${this.#BASE_URL}${this.#END_POINT}`;
     const options = {
       method: 'POST',
@@ -26,15 +64,15 @@ export class BooksAPI {
         'Content-Type': 'application/json',
       },
     };
-    return fetch(url, options).then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        throw new Error('Error create Book');
-      }
-    });
+
+    const res = await fetch(url, options);
+    if (res.ok) {
+      return res.json();
+    } else {
+      throw new Error('Error create Book');
+    }
   }
-  updateBook({ id, ...book }) {
+  async updateBook({ id, ...book }) {
     const url = `${this.#BASE_URL}${this.#END_POINT}/${id}`;
     const options = {
       method: 'PATCH',
@@ -43,11 +81,10 @@ export class BooksAPI {
         'Content-Type': 'application/json',
       },
     };
-    return fetch(url, options)
-      .then(res => res.json())
-      .catch();
+    const res = await fetch(url, options);
+    return res.json();
   }
-  resetBook({ id, ...book }) {
+  async resetBook({ id, ...book }) {
     const url = `${this.#BASE_URL}${this.#END_POINT}/${id}`;
     const options = {
       method: 'PUT',
@@ -56,9 +93,8 @@ export class BooksAPI {
         'Content-Type': 'application/json',
       },
     };
-    return fetch(url, options)
-      .then(res => res.json())
-      .catch();
+    const res = await fetch(url, options);
+    res.json();
   }
   deleteBook(id) {
     const url = `${this.#BASE_URL}${this.#END_POINT}/${id}`;

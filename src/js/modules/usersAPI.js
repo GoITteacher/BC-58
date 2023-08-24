@@ -1,11 +1,12 @@
 export class UsersAPI {
   static #BASE_URL = 'http://localhost:3000';
   static #END_POINT = '/users';
-  static getUsers() {
+  static async getUsers() {
     const url = `${UsersAPI.#BASE_URL}${UsersAPI.#END_POINT}`;
-    return fetch(url).then(res => res.json());
+    const res = await fetch(url);
+    return res.json();
   }
-  static createUser(user) {
+  static async createUser(user) {
     const url = `${this.#BASE_URL}${this.#END_POINT}`;
     const options = {
       method: 'POST',
@@ -15,9 +16,10 @@ export class UsersAPI {
       },
     };
 
-    return fetch(url, options).then(res => res.json());
+    const res = await fetch(url, options);
+    return res.json();
   }
-  static updateUser({ id, ...user }) {
+  static async updateUser({ id, ...user }) {
     const url = `${this.#BASE_URL}${this.#END_POINT}/${id}`;
     const options = {
       method: 'PATCH',
@@ -26,9 +28,10 @@ export class UsersAPI {
         'Content-Type': 'application/json',
       },
     };
-    return fetch(url, options).then(res => res.json());
+    const res = await fetch(url, options);
+    return res.json();
   }
-  static resetUser({ id, ...user }) {
+  static async resetUser({ id, ...user }) {
     const url = `${this.#BASE_URL}${this.#END_POINT}/${id}`;
     const options = {
       method: 'PUT',
@@ -37,7 +40,9 @@ export class UsersAPI {
         'Content-Type': 'application/json',
       },
     };
-    return fetch(url, options).then(res => res.json());
+    const res = await fetch(url, options);
+
+    return res.json();
   }
   static deleteUser(id) {}
 }
